@@ -7,6 +7,9 @@ class MyUser(models.Model):
     username = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
     phone_no = models.CharField(max_length=15)
+    age = models.IntegerField(default=18)
+    email = models.EmailField(default="raja@gmail.com")
+    image = models.TextField(default="https://www.bing.com/ck/a?!&&p=da0861fa735626ffJmltdHM9MTcxNzM3MjgwMCZpZ3VpZD0xMGVmODQyZC0wNDI0LTZhMmQtMjQwMC05MDU5MDVmNjZiYzMmaW5zaWQ9NTY3Mg&ptn=3&ver=2&hsh=3&fclid=10ef842d-0424-6a2d-2400-905905f66bc3&u=a1L2ltYWdlcy9zZWFyY2g_cT1pbWFnZSZGT1JNPUlRRlJCQSZpZD1GQjQ2NTBGODNCNDhBOEIyNjBGMUVDMUFBODlEQThGRTNFNzFFM0Q0&ntb=1")
     def __str__(self) -> str:
         return self.username
 
@@ -36,21 +39,24 @@ class Specialist(models.Model):
     )
     description = models.TextField()
     education = models.TextField()
-
 class Hospital(models.Model):
     name = models.CharField(max_length=255)
     url = models.TextField()
-    location = models.TextField()
+    location = models.TextField(null=True)
     specialists = models.ManyToManyField(Specialist)
-    stats = models.TextField()
+    stats = models.TextField(null=True)
     description = models.TextField()
-
-
+    password = models.CharField(max_length= 64 , default="raja")
+    num_beds = models.PositiveIntegerField(default=0)
+    schedule = models.TextField(default= "22")
+    total_patients = models.PositiveIntegerField(default=0)
+    total_doctors = models.PositiveIntegerField(default=0)
 class Appointment(models.Model):
     user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name="appointments")
     hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE, related_name="appointments")
     datetime = models.DateTimeField()
     comments = models.TextField()
+    
 
 class Symptom(models.Model):
     user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name="symptoms")
@@ -69,3 +75,9 @@ class Review(models.Model):
     STARS = [(i, i) for i in range(1, 6)]
     stars = models.IntegerField(choices=STARS)
     comments = models.TextField()
+class comments(models.Model):
+    user = models.CharField(max_length=255)
+    message = models.TextField()
+    email = models.EmailField()
+    subject = models.CharField(max_length=444)
+    resolved = models.BooleanField(default=False)
